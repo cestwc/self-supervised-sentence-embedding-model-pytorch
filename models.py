@@ -74,7 +74,7 @@ class BERTCNN(nn.Module):
 		
 		self.fivegram = nn.Conv1d(in_channels = embedding_dim, out_channels = embedding_dim // 3, kernel_size = 5, padding = 2)
 
-		self.pool = nn.MaxPool1d(embedding_dim)
+		# self.pool = nn.MaxPool1d(embedding_dim)
 		
 		self.out = nn.Linear(embedding_dim, output_dim)
 
@@ -86,12 +86,18 @@ class BERTCNN(nn.Module):
 			embedded = self.bert(text)[0]
 
 		#embedded = [batch size, sent len, emb dim]
+		
+		embedded = torch.transpose(embedded, 1, 2)
+		
+		#embedded = [batch size, emb dim, sent len]
 
-		contextual_embedded = torch.cat((self.unigram(embedded), self.trigram(embedded), self.fivegram(embedded)), 2)
+		contextual_embedded = torch.cat((self.unigram(embedded), self.trigram(embedded), self.fivegram(embedded)), 1)
 		
-		#contextual_embedded = [batch size, sent len, emb dim]
+		#contextual_embedded = [batch size, emb dim, sent len]
 		
-		sent_emb = self.pool(torch.transpose(contextual_embedded, 1, 2)).squeeze(2)
+		# sent_emb = self.pool(torch.transpose(contextual_embedded, 1, 2)).squeeze(2)
+		
+		sent_emb = torch.mean(contextual_embedded, 2)
 		
 		#sent_emb = [batch size, emb dim]
 		
@@ -99,7 +105,7 @@ class BERTCNN(nn.Module):
 		
 		#output = [batch size, out dim]
 		
-		return output, sent_emb, embedded
+		return output, sent_emb, torch.transpose(embedded, 1, 2)
 	
 
 class MutualInformation(nn.Module):
