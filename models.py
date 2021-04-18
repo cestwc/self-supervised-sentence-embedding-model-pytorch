@@ -86,7 +86,7 @@ class MutualInformation(nn.Module):
 
 		#mask = [batch size, sent len]
 
-		inner = inner.masked_fill(mask == 0, 1e-10))
+		inner = inner.masked_fill(mask == 0, 1e-10)
 
 		inner = torch.sum(inner, 1) / torch.sum(mask, 1)
 
