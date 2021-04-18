@@ -80,7 +80,7 @@ class MutualInformation(nn.Module):
 
 		#sent_emb = [batch size, emb dim, 1]
 
-		inner = self.m(torch.bmm(input, mat2).squeeze(2))
+		inner = self.m(torch.bmm(token_emb, sent_emb).squeeze(2))
 
 		#inner = [batch size, sent len]
 
