@@ -68,11 +68,11 @@ class BERTCNN(nn.Module):
 
 		embedding_dim = bert.config.to_dict()['hidden_size']
 		
-		self.unigram = nn.Conv1d(in_channels = embedding_dim, out_channels = embedding_dim / 3, kernel_size = 1)
+		self.unigram = nn.Conv1d(in_channels = embedding_dim, out_channels = embedding_dim // 3, kernel_size = 1)
 		
-		self.trigram = nn.Conv1d(in_channels = embedding_dim, out_channels = embedding_dim / 3, kernel_size = 3, padding = 1)
+		self.trigram = nn.Conv1d(in_channels = embedding_dim, out_channels = embedding_dim // 3, kernel_size = 3, padding = 1)
 		
-		self.fivegram = nn.Conv1d(in_channels = embedding_dim, out_channels = embedding_dim / 3, kernel_size = 5, padding = 2)
+		self.fivegram = nn.Conv1d(in_channels = embedding_dim, out_channels = embedding_dim // 3, kernel_size = 5, padding = 2)
 
 		self.pool = nn.MaxPool1d(embedding_dim)
 		
