@@ -1,7 +1,4 @@
 from transformers import BertModel
-
-bert = BertModel.from_pretrained('bert-base-uncased')
-
 import torch.nn as nn
 
 class BERTGRU(nn.Module):
@@ -54,4 +51,47 @@ class BERTGRU(nn.Module):
         
         #output = [batch size, out dim]
         
-        return output, embedded
+        return output, hidden, embedded
+    
+    
+
+class MutualInformation(nn.Module):
+    def __init__(self, sent_pad_idx):        
+        super().__init__()
+        
+        self.sent_pad_idx = sent_pad_idx
+        
+        self.m = nn.LogSigmoid()
+        
+    def create_mask(self, sent):
+        mask = (sent != self.sent_pad_idx)#.permute(1, 0)
+        return mask
+        
+    def forward(self, sent, sent_len, sent_emb, token_emb):
+        
+        #sent = [batch size, sent len]
+        #sent_len = [batch size]
+        #sent_emb = [batch size, emb dim]
+        #token_emb = [batch size, sent len, emb dim]
+        
+        sent_emb = torch.unsqueeze(sent_emb, 2)
+        
+        #sent_emb = [batch size, emb dim, 1]
+        
+        inner = self.m(torch.bmm(input, mat2).squeeze(2))
+        
+        #inner = [batch size, sent len]
+        
+        mask = self.create_mask(sent)
+
+        #mask = [batch size, sent len]
+        
+        inner = inner.masked_fill(mask == 0, 1e-10))
+        
+        inner = torch.sum(inner, 1) / torch.sum(mask, 1)
+        
+        #inner = [batch size]
+        
+        return inner
+        
+        
