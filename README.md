@@ -51,7 +51,7 @@ model = BERTCNN(bert, OUTPUT_DIM)
 ```
 or this
 ```python
-HIDDEN_DIM = 256
+HIDDEN_DIM = 384 # = 768 / 2
 OUTPUT_DIM = 1
 N_LAYERS = 2
 BIDIRECTIONAL = True
