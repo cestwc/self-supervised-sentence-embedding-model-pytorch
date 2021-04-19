@@ -114,7 +114,7 @@ class MutualInformation(nn.Module):
 
 		self.sent_pad_idx = sent_pad_idx
 		
-		self.relu = nn.ReLU()
+		self.activate = nn.Tanh()
 
 		self.m = nn.LogSigmoid()
 
@@ -133,7 +133,7 @@ class MutualInformation(nn.Module):
 
 		#sent_emb = [batch size, emb dim, 1]
 
-		inner = self.m(torch.bmm(self.relu(token_emb), self.relu(sent_emb)).squeeze(2))
+		inner = self.m(torch.bmm(self.activate(token_emb), self.activate(sent_emb)).squeeze(2))
 
 		#inner = [batch size, sent len]
 
