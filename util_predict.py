@@ -1,3 +1,5 @@
+import torch
+
 class Predictor():
 
 	def __init__(self):
